@@ -55,6 +55,16 @@ async function run() {
       const result = await payBillCollection.insertOne(newBills);
       res.send(result);
     });
+
+    app.get("/pay-bills",async(req,res)=>{
+      const email = req.query.email;
+      const query = {}
+      if(email){
+        query.email = email;
+      }
+          const result = await payBillCollection.find(query).toArray();
+          res.send(result)
+    })
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log(
