@@ -56,15 +56,36 @@ async function run() {
       res.send(result);
     });
 
-    app.get("/pay-bills",async(req,res)=>{
+    app.get("/pay-bills", async (req, res) => {
       const email = req.query.email;
-      const query = {}
-      if(email){
+      const query = {};
+      if (email) {
         query.email = email;
       }
-          const result = await payBillCollection.find(query).toArray();
-          res.send(result)
-    })
+      const result = await payBillCollection.find(query).toArray();
+      res.send(result);
+    });
+
+    // update pay bills data functionlity here
+
+    app.patch("/pay-bills/:id", async (req, res) => {
+      console.log("Hit route");
+      const id = req.params.id;
+      const upDateBill = req.body;
+      console.log(upDateBill)
+      const query = { _id: new ObjectId(id) };
+      const update = {
+        $set: {
+          amount: upDateBill.amount,
+          address: upDateBill.address,
+          phone: upDateBill.phone,
+          date: upDateBill.date,
+        },
+      };
+      const result = await payBillCollection.updateOne(query, update);
+      res.send(result)
+    });
+
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log(
