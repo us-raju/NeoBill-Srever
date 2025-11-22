@@ -69,10 +69,8 @@ async function run() {
     // update pay bills data functionlity here
 
     app.patch("/pay-bills/:id", async (req, res) => {
-      console.log("Hit route");
       const id = req.params.id;
       const upDateBill = req.body;
-      console.log(upDateBill)
       const query = { _id: new ObjectId(id) };
       const update = {
         $set: {
@@ -83,7 +81,16 @@ async function run() {
         },
       };
       const result = await payBillCollection.updateOne(query, update);
-      res.send(result)
+      res.send(result);
+    });
+
+    // delete pay bills data functionlity here
+
+    app.delete("/pay-bills/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await payBillCollection.deleteOne(query);
+      res.send(result);
     });
 
     // Send a ping to confirm a successful connection
